@@ -180,25 +180,7 @@ CREATE TABLE sales_orders_details (
         REFERENCES promotions(promotion_id)
 );
 
--- 15. Transactions
-CREATE TABLE transactions (
-    transaction_id     SERIAL PRIMARY KEY,
-    transaction_date   DATE NOT NULL,
-    amount             DECIMAL(10,2) NOT NULL,
-    transaction_type   VARCHAR(10) NOT NULL
-        CHECK (transaction_type IN ('sale','purchase')),
-    payment_type       VARCHAR(50),
-    sales_orders_id    INT
-        REFERENCES sales_orders(sales_orders_id),
-    purchase_order_id  INT
-        REFERENCES purchase_orders(purchase_order_id),
-    CHECK (
-        (transaction_type = 'sale'     AND sales_orders_id    IS NOT NULL AND purchase_order_id IS NULL)
-     OR (transaction_type = 'purchase' AND purchase_order_id IS NOT NULL AND sales_orders_id    IS NULL)
-    )
-);
-
--- 16. Expenses
+-- 15. Expenses
 CREATE TABLE expenses (
     expense_id   SERIAL PRIMARY KEY,
     category     VARCHAR(50) NOT NULL,
@@ -211,7 +193,7 @@ CREATE TABLE expenses (
     description  TEXT
 );
 
--- 17. Returns
+-- 16. Returns
 CREATE TABLE returns (
     return_id               SERIAL PRIMARY KEY,
     sales_orders_detail_id  INT NOT NULL
